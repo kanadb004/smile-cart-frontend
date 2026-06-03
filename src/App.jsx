@@ -1,31 +1,33 @@
-// import "./App.css";
-// // eslint-disable-next-line import/extensions
-// import logo from "./logo.svg";
+import { Route, Switch, NavLink } from "react-router-dom";
 
-// const App = () => (
-//   <div className="App">
-//     <header className="App-header">
-//       <img alt="logo" className="App-logo" src={logo} />
-//       <p>
-//         Edit <code>src/App.js</code> and save to reload.
-//       </p>
-//       <a
-//         className="App-link"
-//         href="https://reactjs.org"
-//         rel="noopener noreferrer"
-//         target="_blank"
-//       >
-//         Learn React
-//       </a>
-//     </header>
-//   </div>
-// );
-
-// export default App;
-
-import "./App.css";
+import Home from "./components/Home";
+import PageNotFound from "./components/PageNotFound";
 import Product from "./components/Product";
 
-const App = () => <Product />;
+const App = () => (
+  <>
+    <div className="flex space-x-2">
+      {/* <Link to="/">Home</Link>
+      <Link to="/product">Product</Link> */}
+
+      <NavLink exact activeClassName="underline font-bold" to="/">
+        Home
+      </NavLink>
+      <NavLink exact activeClassName="underline font-bold" to="/product">
+        Product
+      </NavLink>
+    </div>
+    {/* <Route exact component={Home} path="/" />
+    <Route exact component={Product} path="/product" /> */}
+    <Switch>
+      {/* <Route component={Product} path="/product" />
+      <Route component={Home} path="/" /> */}
+
+      <Route exact component={Home} path="/" />
+      <Route exact component={Product} path="/product" />
+      <Route component={PageNotFound} path="*" />
+    </Switch>
+  </>
+);
 
 export default App;
