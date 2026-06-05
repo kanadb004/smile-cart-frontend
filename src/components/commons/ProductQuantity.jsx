@@ -6,9 +6,11 @@ import { useRef } from "react";
 import { TooltipWrapper } from "components/commons";
 import { VALID_COUNT_REGEX } from "components/constants";
 import useSelectedQuantity from "components/hooks/useSelectedQuantity";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Input, Button, Toastr } from "neetoui";
 
-const ProductQuantity = ({ slug, availableQuantity }) => {
+// const ProductQuantity = ({ slug, availableQuantity }) => {
+const ProductQuantity = ({ slug }) => {
   const countInputFocus = useRef(null);
 
   //   const [selectedQuantity, setSelectedQuantity] = useCartItemsStore(
@@ -16,6 +18,10 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
   //     shallow
   //   );
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
+
+  const { data: product = {} } = useShowProduct(slug);
+
+  const { availableQuantity } = product;
 
   const parsedSelectedQuantity = parseInt(selectedQuantity) || 0;
   const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity;
@@ -33,7 +39,7 @@ const ProductQuantity = ({ slug, availableQuantity }) => {
       Toastr.error(`Only ${availableQuantity} units are available`, {
         autoClose: 2000,
       });
-      setSelectedQuantity(availableQuantity);
+      setSelectedQuantity();
       countInputFocus.current.blur();
     } else if (VALID_COUNT_REGEX.test(value)) {
       setSelectedQuantity(value);

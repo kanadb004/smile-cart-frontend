@@ -1,46 +1,46 @@
-import { useState, useEffect } from "react";
-
-import productsApi from "apis/products";
 import { Header, PageNotFound, PageLoader } from "components/commons";
 import AddToCart from "components/commons/AddToCart";
 import useSelectedQuantity from "components/hooks/useSelectedQuantity";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Typography, Button } from "neetoui";
-import { isNotNil, append } from "ramda";
+import { isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
 
 import Carousel from "./Carousel";
 
 const Product = () => {
-  const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [product, setProduct] = useState({});
+  // const [isError, setIsError] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [product, setProduct] = useState({});
 
   const { slug } = useParams();
 
+  const { data: product = {}, isLoading, isError } = useShowProduct(slug);
+
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
-  const fetchProduct = async () => {
-    try {
-      //   const response = await productsApi.show();
-      //   setProduct(response.data);
+  // const fetchProduct = async () => {
+  //   try {
+  //     //   const response = await productsApi.show();
+  //     //   setProduct(response.data);
 
-      // const product = await productsApi.show();
-      // setProduct(product);
+  //     // const product = await productsApi.show();
+  //     // setProduct(product);
 
-      const response = await productsApi.show(slug);
-      setProduct(response);
-    } catch (error) {
-      console.log("An error occurred:", error);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     const response = await productsApi.show(slug);
+  //     // setProduct(response);
+  //   } catch (error) {
+  //     console.log("An error occurred:", error);
+  //     // setIsError(true);
+  //   } finally {
+  //     // setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProduct();
-  }, []);
+  // useEffect(() => {
+  //   fetchProduct();
+  // }, []);
 
   if (isError) {
     return <PageNotFound />;
@@ -57,15 +57,7 @@ const Product = () => {
   //     image_url: imageUrl,
   //   } = product;
 
-  const {
-    name,
-    description,
-    mrp,
-    offerPrice,
-    imageUrls,
-    imageUrl,
-    availableQuantity,
-  } = product;
+  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
 
   const totalDiscounts = mrp - offerPrice;
   const discountPercentage = ((totalDiscounts / mrp) * 100).toFixed(1);
@@ -91,7 +83,8 @@ const Product = () => {
             {/* <Carousel imageUrls={append(image_url, image_urls)} title={name} /> */}
 
             {isNotNil(imageUrls) ? (
-              <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              // <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              <Carousel />
             ) : (
               <img alt={name} className="w-48" src={imageUrl} />
             )}
@@ -114,7 +107,7 @@ const Product = () => {
             {discountPercentage}% off
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ availableQuantity, slug }} />
+            <AddToCart {...{ slug }} />
             <Button
               className="bg-neutral-800 hover:bg-neutral-950"
               label="Buy now"

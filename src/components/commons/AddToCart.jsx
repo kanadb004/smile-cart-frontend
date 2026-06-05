@@ -44,7 +44,7 @@ import { isNil } from "ramda";
 
 import ProductQuantity from "./ProductQuantity";
 
-const AddToCart = ({ slug, availableQuantity }) => {
+const AddToCart = ({ slug }) => {
   // const [selectedQuantity, setSelectedQuantity] = useCartItemsStore(
   //   paths([["cartItems", slug], ["setSelectedQuantity"]]),
   //   shallow
@@ -61,7 +61,7 @@ const AddToCart = ({ slug, availableQuantity }) => {
     return <Button label="Add to cart" size="large" onClick={handleClick} />;
   }
 
-  return <ProductQuantity {...{ availableQuantity, slug }} />;
+  return <ProductQuantity {...{ slug }} />;
 };
 
 export default AddToCart;

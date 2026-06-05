@@ -1,23 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 // import { useEffect } from "react";
 
 import classNames from "classnames";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import { Left, Right } from "neetoicons";
 import { Button } from "neetoui";
+import { append } from "ramda";
+import { useParams } from "react-router-dom";
 
-const Carousel = ({ imageUrls, title }) => {
+const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { slug } = useParams();
 
   const timerRef = useRef(null);
 
-  useEffect(() => {
-    // const interval = setInterval(handleNext, 3000);
-    // return () => clearInterval(interval);
+  const { data: { imageUrl, imageUrls: partialImageUrls, title } = {} } =
+    useShowProduct(slug);
 
-    timerRef.current = setInterval(handleNext, 3000);
+  const imageUrls = append(imageUrl, partialImageUrls);
 
-    return () => clearInterval(timerRef.current);
-  }, []);
+  // useEffect(() => {
+  //   // const interval = setInterval(handleNext, 3000);
+  //   // return () => clearInterval(interval);
+
+  //   timerRef.current = setInterval(handleNext, 3000);
+
+  //   return () => clearInterval(timerRef.current);
+  // }, []);
 
   const resetTimer = () => {
     clearInterval(timerRef.current);
