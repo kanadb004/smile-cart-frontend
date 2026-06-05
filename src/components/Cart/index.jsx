@@ -14,7 +14,17 @@ import ProductCard from "./ProductCard";
 
 const Cart = () => {
   //   const slugs = useCartItemsStore(store => keys(store.cartItems), shallow);
-  const { cartItems, setSelectedQuantity } = useCartItemsStore();
+  //   const { cartItems, setSelectedQuantity } = useCartItemsStore();
+
+  // const { cartItems, setSelectedQuantity } = useCartItemsStore(
+  //     store => ({
+  //         cartItems: store.cartItems,
+  //         setSelectedQuantity: store.setSelectedQuantity,
+  //     }),
+  //     shallow
+  // );
+  const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
+
   const slugs = keys(cartItems);
 
   const [products, setProducts] = useState([]);
