@@ -1,5 +1,6 @@
 import { LeftArrow } from "neetoicons";
 import { Typography } from "neetoui";
+import { keys } from "ramda";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
 // import CartItemsContext from "src/contexts/CartItemsContext";
@@ -15,7 +16,12 @@ const Header = ({
 
   // const { cartItems } = useCartItemsStore();
   // const cartItemsCount = cartItems.length;
-  const cartItemsCount = useCartItemsStore(store => store.cartItems.length);
+
+  // const cartItemsCount = useCartItemsStore(store => store.cartItems.length);
+
+  const cartItemsCount = useCartItemsStore(
+    store => keys(store.cartItems).length
+  );
 
   const history = useHistory();
 
