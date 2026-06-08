@@ -1,6 +1,6 @@
 import axios from "axios";
 import { t } from "i18next";
-import { keysToCamelCase } from "neetocist";
+import { keysToCamelCase, keysToSnakeCase } from "neetocist";
 import { Toastr } from "neetoui";
 
 const shouldShowToastr = response =>
@@ -19,9 +19,11 @@ const showErrorToastr = error => {
 };
 
 const requestInterceptors = () => {
-  // axios.interceptors.request.use(
-  //   evolve({ data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase })
-  // );
+  axios.interceptors.request.use(request => ({
+    ...request,
+    data: request.data ? keysToSnakeCase(request.data) : request.data,
+    params: request.params ? keysToSnakeCase(request.params) : request.params,
+  }));
 
   axios.interceptors.response.use(
     response => {
@@ -49,19 +51,10 @@ const transformResponseKeysToCamelCase = response => {
   if (response.data) response.data = keysToCamelCase(response.data);
 };
 
-const responseInterceptors = () => {
-  axios.interceptors.response.use(response => {
-    transformResponseKeysToCamelCase(response);
-
-    return response.data;
-  });
-};
-
 // export default responseInterceptors;
 export default function initializeAxios() {
   axios.defaults.baseURL =
     "https://smile-cart-backend-staging.neetodeployapp.com/";
   setHttpHeaders();
-  responseInterceptors();
   requestInterceptors();
 }

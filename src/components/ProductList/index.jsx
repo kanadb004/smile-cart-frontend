@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Header, PageLoader } from "components/commons";
 import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
-import useFuncDebounce from "hooks/useFuncDebounce";
+import useDebounce from "hooks/useDebounce";
 import useQueryParams from "hooks/useQueryParams";
 import { filterNonNull } from "neetocist";
 import { Search } from "neetoicons";
@@ -18,8 +18,13 @@ import ProductListItem from "./ProductListItem";
 const ProductList = () => {
   const queryParams = useQueryParams();
   const { page, pageSize, searchTerm = "" } = queryParams;
+  const debouncedSearchTerm = useDebounce(searchTerm);
 
   const [searchKey, setSearchKey] = useState(searchTerm);
+
+  useEffect(() => {
+    setSearchKey(searchTerm);
+  }, [searchTerm]);
 
   // const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_INDEX);
 
@@ -41,7 +46,7 @@ const ProductList = () => {
   // });
 
   const productsParams = {
-    searchTerm,
+    searchTerm: debouncedSearchTerm,
     // page: currentPage,
     // pageSize: DEFAULT_PAGE_SIZE,
     page: Number(page) || DEFAULT_PAGE_INDEX,
@@ -59,8 +64,7 @@ const ProductList = () => {
   const { data: { products = [], totalProductsCount } = {}, isLoading } =
     useFetchProducts(productsParams);
 
-  // const updateQueryParams = ({ target: { value } }) => {
-  const updateQueryParams = useFuncDebounce(value => {
+  const updateQueryParams = value => {
     const params = {
       page: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PAGE_SIZE,
@@ -68,7 +72,7 @@ const ProductList = () => {
     };
 
     history.replace(buildUrl(routes.products.index, filterNonNull(params)));
-  });
+  };
 
   // const fetchProducts = async () => {
   //   try {

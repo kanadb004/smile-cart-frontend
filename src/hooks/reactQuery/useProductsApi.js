@@ -26,16 +26,10 @@ export const useFetchCartProducts = slugs => {
   const { t } = useTranslation();
   const { cartItems, setSelectedQuantity } = useCartItemsStore();
 
-  //   useQueries(
-  //     slugs.map(slug => ({
-  //       queryKey: [QUERY_KEYS.PRODUCTS, slug],
-  //       queryFn: () => productsApi.show(slug),
-  //     }))
-  //   );
-
   const responses = useQueries(
     slugs.map(slug => ({
-      // ...
+      queryKey: [QUERY_KEYS.PRODUCTS, slug],
+      queryFn: () => productsApi.show(slug),
       onSuccess: ({ availableQuantity, name }) => {
         if (availableQuantity >= cartItems[slug]) return;
 
