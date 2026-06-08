@@ -25,7 +25,7 @@ persistQueryClient({
   dehydrateOptions: {
     shouldDehydrateQuery: ({ queryKey }) =>
       [QUERY_KEYS.COUNTRIES, QUERY_KEYS.STATES].some(key =>
-        queryKey.includes(key)
+        queryKey?.includes(key)
       ),
   },
 });
